@@ -1,0 +1,389 @@
+﻿<Window x:Class="SSAFY_Util.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SSAFY_Util"
+        mc:Ignorable="d"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Background="#00000000"
+        WindowStyle="None"
+        FontSize="20"
+        Loaded="Window_Loaded"
+        Topmost="True"
+        Title="MainWindow" Height="1040">
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="0"
+            ResizeBorderThickness="3" />
+    </WindowChrome.WindowChrome>
+
+    <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Stretch">
+        <Grid x:Name="ToggleGrid">
+            <Button x:Name="ToggleBtn"
+                    Height="30"
+                    Background="White"
+                    BorderThickness="0"
+                    Margin="0 0 10 0"
+                    Click="ToggleContent">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border x:Name="LoginBorder" 
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="DarkGray" TargetName="LoginBorder"  />
+                                            <Setter Property="TextBlock.Foreground" Value="Black"  TargetName="LoginBorder" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+                <Image Source="assets\Hamburger_icon.png"
+                       Height="30"></Image>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="ContentGrid"
+                    VerticalAlignment="Center"
+                    Grid.Column="1"
+                    Width="300"
+                    Height="1000"
+                    Background="#55FFFFFF">
+            <Border x:Name="MainContent"
+                    Padding="10"
+                    Visibility="Visible">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.8*" />
+                            <ColumnDefinition Width="0.2*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="SSAFY UTIL"
+                                    FontSize="30"
+                                    FontWeight="Bold">
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Color="White" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <Button x:Name="LogoutBtn" 
+                                Content="LOGOUT"
+                                Grid.Column="1"
+                                FontSize="13"
+                                Foreground="White"
+                                Background="Black"
+                                Height="30"
+                                Click="LogoutBtn_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border x:Name="LoginBorder" 
+                                                        Background="{TemplateBinding Background}"
+                                                        CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="DarkGray" TargetName="LoginBorder"  />
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"  TargetName="LoginBorder" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                    <Grid Height="100">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.8*" />
+                            <RowDefinition Height="0.2*" />
+                        </Grid.RowDefinitions>
+
+                        <Border Margin="2"
+                                BorderBrush="Black"
+                                Background="White"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                            <StackPanel VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="입실 시간"
+                                        FontWeight="SemiBold"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="CheckInText"
+                                        Text="00:00"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Button Margin="2"
+                                Grid.Row="1"
+                                FontSize="10"
+                                Foreground="White"
+                                Background="Black"
+                                x:Name="CheckInBtn"
+                                Click="CheckInBtn_Click"
+                                Content="입실하기">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border x:Name="LoginBorder" 
+                                                        Background="{TemplateBinding Background}"
+                                                        CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                                        VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="DarkGray" TargetName="LoginBorder"  />
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"  TargetName="LoginBorder" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Border Margin="2"
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                BorderBrush="Black"
+                                Background="White"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                            <StackPanel VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="퇴실 시간"
+                                        FontWeight="SemiBold"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="CheckOutText"
+                                        Text="00:00"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Button Margin="2"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                FontSize="10"
+                                Foreground="White"
+                                Background="Black"
+                                x:Name="CheckOutBtn"
+                                Click="CheckOutBtn_Click"
+                                Content="퇴실하기">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border x:Name="LoginBorder" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="DarkGray" TargetName="LoginBorder"  />
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"  TargetName="LoginBorder" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                    <StackPanel Margin="0 10">
+                        <TextBlock Text="커리큘럼"
+                                    FontWeight="Bold"
+                                   Foreground="White"
+                                    Margin="0 0 0 10"/>
+                        <Border Height="300"
+                                BorderThickness="1"
+                                BorderBrush="Black"
+                                Background="White"
+                                CornerRadius="10">
+                            <TextBlock Text="개발중입니다"
+                                        FontSize="15"
+                                        FontWeight="Bold"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Margin="0 10">
+                        <TextBlock Text="오늘 점심 메뉴"
+                                    FontWeight="Bold"
+                                   Foreground="White"
+                                    Margin="0 0 0 10"/>
+                        <Border Height="300"
+                                BorderThickness="1"
+                                BorderBrush="Black"
+                                Background="White"
+                                CornerRadius="10">
+                            <TextBlock Text="개발중입니다"
+                                        FontSize="15"
+                                        FontWeight="Bold"
+                                        Foreground="Black"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border x:Name="LoginForm"
+                    Width="250"
+                    Height="300"
+                    Background="White"
+                    CornerRadius="6"
+                    VerticalAlignment="Center"
+                    Visibility="Visible">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15"
+                                        Direction="-90" 
+                                        RenderingBias="Quality" 
+                                        ShadowDepth="2" 
+                                        Color="Gray" />
+                </Border.Effect>
+                <StackPanel Orientation="Vertical"
+                            Margin="20">
+                    <TextBlock Text="SSAFY LOGIN" 
+                                FontSize="15"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                FontWeight="Bold"
+                                Padding="10" />
+                    <Grid VerticalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="SSAFY ID" 
+                                    Grid.Row="0"
+                                    FontSize="16"
+                                    VerticalAlignment="Bottom"/>
+                        <Grid Grid.Column="1"
+                                Grid.Row="1">
+                            <TextBox Padding="0,5"
+                                        Width="210"
+                                        Margin="0, 0, 0, 15"
+                                        FontSize="13"
+                                        BorderThickness="0,0,0,1"
+                                        HorizontalAlignment="Left"
+                                        x:Name="EmailTextBox"/>
+                            <TextBlock Text="Edu SSAFY Email"
+                                        IsHitTestVisible="False"
+                                        Margin="5, 0, 0, 15"
+                                        FontSize="13"
+                                        Foreground="DarkGray"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=EmailTextBox}" Value="">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+
+                        <TextBlock Text="SSAFY PW" 
+                                    Grid.Row="2"
+                                    FontSize="16"
+                                    HorizontalAlignment="Left"/>
+                        <PasswordBox Grid.Column="1"
+                                        Grid.Row="3"
+                                        Padding="0,5"
+                                        Width="210"
+                                        Margin="0, 0, 0, 15"
+                                        FontSize="13"
+                                        BorderThickness="0,0,0,1"
+                                        HorizontalAlignment="Left"
+                                        x:Name="PasswordBox"
+                                        Password="PASSWORD"/>
+
+                        <StackPanel Grid.Row="4"
+                                    Orientation="Horizontal"
+                                    Margin="0 0 0 10">
+                            <CheckBox VerticalAlignment="Center"
+                                      x:Name="AutoLoginCheckBox">
+                            </CheckBox>
+                            <Label Content="Auto Login"
+                                   FontSize="14"
+                                   VerticalAlignment="Center">
+                            </Label>
+                        </StackPanel>
+                    </Grid>
+                    <Button x:Name="LoginBtn" 
+                            Content="Login" 
+                            Foreground="White"
+                            Background="Black"
+                            Height="35"
+                            Width="210"
+                            Click="LoginBtn_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="LoginBorder" 
+                                                    Background="{TemplateBinding Background}"
+                                                    CornerRadius="16">
+                                                <ContentPresenter HorizontalAlignment="Center" 
+                                                                    VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="DarkGray" TargetName="LoginBorder"  />
+                                                    <Setter Property="TextBlock.Foreground" Value="Black"  TargetName="LoginBorder" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </StackPanel>
+</Window>
