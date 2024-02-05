@@ -83,17 +83,11 @@ namespace SSAFY_Util
             quitItem.Click += (s, e) =>
             {
                 App.Current.Shutdown();
+                notifyIcon.Visible = false;
                 notifyIcon.Dispose();
             };
 
-            ToolStripMenuItem settingItem = new();
-            settingItem.Text = "Setting";
-            settingItem.Click += (s, e) =>
-            {
-                
-            };
-
-            contextMenu.Items.Add(settingItem);
+            // contextMenu.Items.Add(settingItem);
             contextMenu.Items.Add(quitItem);
 
             notifyIcon.Icon = new Icon(Common.GetPath(@"assets\\logo.ico"));
