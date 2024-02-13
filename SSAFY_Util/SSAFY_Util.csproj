@@ -1,45 +1,51 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-	<UseWindowsForms>true</UseWindowsForms>
-	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<ApplicationIcon>assets\logo.ico</ApplicationIcon>
-	<Authors>Harine</Authors>
-	<Company>SSAFY</Company>
-	<Description>SSAFY 학생들을 위한 자동 출석체크 프로그램</Description>
-	<PackageIcon>logo.ico</PackageIcon>
-	<NeutralLanguage>ko-KR</NeutralLanguage>
-	<FileVersion>0.1</FileVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Authors>Harine</Authors>
+    <Company>SSAFY</Company>
+    <Description>SSAFY 학생들을 위한 자동 출석체크 프로그램</Description>
+    <PackageIcon>logo.png</PackageIcon>
+    <NeutralLanguage>ko-KR</NeutralLanguage>
+    <FileVersion>0.1</FileVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <AssemblyVersion>0.1.0</AssemblyVersion>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
-
   <ItemGroup>
-    <None Remove="assets\Hamburger_icon.png" />
+    <None Remove="assets\fonts\BMJUA_ttf.ttf" />
+    <None Remove="assets\fonts\Segoe Fluent Icons.ttf" />
+    <None Remove="logo.png" />
   </ItemGroup>
-
   <ItemGroup>
-    <Content Include="assets\logo.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
-    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
-    <PackageReference Include="Selenium.Support" Version="4.16.2" />
-    <PackageReference Include="Selenium.WebDriver" Version="4.16.2" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="120.0.6099.10900" />
-    <PackageReference Include="Squirrel.Windows" Version="2.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="assets\Hamburger_icon.png">
+    <Resource Include="assets\fonts\BMJUA_ttf.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="assets\fonts\Segoe Fluent Icons.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <EmbeddedResource Include="logo.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Autoupdater.NET.Official" Version="1.8.4" />
+    <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+    <PackageReference Include="Selenium.Support" Version="4.17.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="121.0.6167.8500" />
+    <PackageReference Include="WPF-UI" Version="3.0.0" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -47,14 +53,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
-    <None Update="assets\logo.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="logo.ico">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
-    </None>
-    <None Update="assets\logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">
@@ -62,5 +64,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

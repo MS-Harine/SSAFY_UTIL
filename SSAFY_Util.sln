@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.8.34408.163
+VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSAFY_Util", "SSAFY_Util\SSAFY_Util.csproj", "{7F2E3B80-AAB2-4FC7-9FC8-424E605C07B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSAFY_Util", "SSAFY_Util\SSAFY_Util.csproj", "{7F2E3B80-AAB2-4FC7-9FC8-424E605C07B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

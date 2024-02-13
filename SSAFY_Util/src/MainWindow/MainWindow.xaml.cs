@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media.Animation;
 using SSAFY_Util.Utils;
+using APIService;
 
 namespace SSAFY_Util
 {
@@ -11,10 +12,10 @@ namespace SSAFY_Util
     {
         private readonly NotifyIcon notifyIcon = new();
         private readonly ContextMenuStrip contextMenu = new();
-        private readonly WebService service = new();
+        private readonly SSAFYWeb service = new();
 
-        private Storyboard closeAnimation = new();
-        private Storyboard openAnimation = new();
+        private readonly Storyboard closeAnimation = new();
+        private readonly Storyboard openAnimation = new();
         private bool isOpen = true;
 
         private bool isLogined = false;
@@ -22,12 +23,12 @@ namespace SSAFY_Util
         public MainWindow()
         {
             InitializeComponent();
-            if (AutoLogin())
+            Style = (Style)FindResource(typeof(Window));
+
+            Loaded += (sender, args) =>
             {
-                isLogined = true;
-                UpdateCheckInOutTime();
-            }
-            LoginWindowSetup(isLogined);
+                Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this);
+            };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -35,36 +36,13 @@ namespace SSAFY_Util
             SetLocationAndShape();
             SetupNotifyIcon();
             SetupAnimation();
-        }
 
-        private void LoginWindowSetup(bool isLogin)
-        {
-            if (isLogin)
+            if (AutoLogin())
             {
-                LoginForm.Visibility = Visibility.Collapsed;
-                MainContent.Visibility = Visibility.Visible;
-                ContentGrid.VerticalAlignment = VerticalAlignment.Top;
+                isLogined = true;
+                UpdateCheckInOutTime();
             }
-            else
-            {
-                LoginForm.Visibility = Visibility.Visible;
-                MainContent.Visibility = Visibility.Collapsed;
-                ContentGrid.VerticalAlignment = VerticalAlignment.Center;
-            }
-        }
-
-        private void UpdateCheckInOutTime()
-        {
-            string? CheckInTime = service.GetCheckInTime();
-            if (CheckInTime != null)
-            {
-                CheckInText.Text = CheckInTime;
-            }
-            string? CheckOutTime = service.GetCheckOutTime();
-            if (CheckInTime != null)
-            {
-                CheckOutText.Text = CheckOutTime;
-            }
+            LoginWindowSetup(isLogined);
         }
 
         private void SetLocationAndShape()
@@ -82,18 +60,26 @@ namespace SSAFY_Util
             quitItem.Text = "Exit";
             quitItem.Click += (s, e) =>
             {
-                App.Current.Shutdown();
+                service.QuitDriver();
                 notifyIcon.Visible = false;
                 notifyIcon.Dispose();
+                App.Current.Shutdown();
             };
 
             // contextMenu.Items.Add(settingItem);
             contextMenu.Items.Add(quitItem);
 
-            notifyIcon.Icon = new Icon(Common.GetPath(@"assets\\logo.ico"));
+            notifyIcon.Icon = new Icon(Common.GetPath(@"logo.ico"));
             notifyIcon.Visible = true;
             notifyIcon.Text = "SSAFY";
             notifyIcon.ContextMenuStrip = contextMenu;
+        }
+
+        private void ToggleContent(object sender, RoutedEventArgs e)
+        {
+            isOpen = !isOpen;
+            if (isOpen) openAnimation.Begin();
+            else closeAnimation.Begin();
         }
 
         private void SetupAnimation()
@@ -102,7 +88,8 @@ namespace SSAFY_Util
             {
                 From = ContentGrid.ActualWidth,
                 To = 0,
-                Duration = new Duration(TimeSpan.FromMilliseconds(600)),
+                BeginTime = new TimeSpan() + TimeSpan.FromMilliseconds(1000),
+                Duration = new Duration(TimeSpan.FromMilliseconds(100)),
                 EasingFunction = new ExponentialEase()
                 {
                     EasingMode = EasingMode.EaseInOut,
@@ -112,7 +99,7 @@ namespace SSAFY_Util
             {
                 From = 0,
                 To = ContentGrid.ActualWidth,
-                Duration = new Duration(TimeSpan.FromMilliseconds(600)),
+                Duration = new Duration(TimeSpan.FromMilliseconds(100)),
                 EasingFunction = new ExponentialEase()
                 {
                     EasingMode = EasingMode.EaseInOut,
@@ -123,7 +110,7 @@ namespace SSAFY_Util
             {
                 From = Left,
                 To = Left + ContentGrid.ActualWidth,
-                Duration = new Duration(TimeSpan.FromMilliseconds(600)),
+                Duration = new Duration(TimeSpan.FromMilliseconds(1000)),
                 EasingFunction = new ExponentialEase()
                 {
                     EasingMode = EasingMode.EaseInOut,
@@ -133,7 +120,8 @@ namespace SSAFY_Util
             {
                 From = Left + ContentGrid.ActualWidth,
                 To = Left,
-                Duration = new Duration(TimeSpan.FromMilliseconds(600)),
+                BeginTime = new TimeSpan() + TimeSpan.FromMilliseconds(100),
+                Duration = new Duration(TimeSpan.FromMilliseconds(1000)),
                 EasingFunction = new ExponentialEase()
                 {
                     EasingMode = EasingMode.EaseInOut,

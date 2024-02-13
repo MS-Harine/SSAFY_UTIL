@@ -2,12 +2,19 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SSAFY_Util"
-             StartupUri="MainWindow.xaml">
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             StartupUri="src/MainWindow/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/Light.xaml" />
+                <ui:ThemesDictionary Theme="Light" />
+                <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="SegoeFluentIcons">pack://application:,,,/;assets/fonts/#Segoe Fluent Icons</FontFamily>
+            <FontFamily x:Key="JUA">pack://application:,,,/;assets/fonts/#BMJUA_ttf</FontFamily>
+            <Style TargetType="Control">
+                <Setter Property="FontFamily" Value="JUA" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
