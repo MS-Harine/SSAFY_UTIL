@@ -16,6 +16,7 @@ namespace SSAFY_Util
 
         private readonly Storyboard closeAnimation = new();
         private readonly Storyboard openAnimation = new();
+        private readonly string appName = "SSAFY_UTIL";
         private bool isOpen = true;
 
         private bool isLogined = false;
@@ -36,6 +37,10 @@ namespace SSAFY_Util
             SetLocationAndShape();
             SetupNotifyIcon();
             SetupAnimation();
+            if (!CheckStartUp(appName))
+            {
+                SetStartUp(appName);
+            }
 
             if (AutoLogin())
             {
@@ -73,6 +78,27 @@ namespace SSAFY_Util
             notifyIcon.Visible = true;
             notifyIcon.Text = "SSAFY";
             notifyIcon.ContextMenuStrip = contextMenu;
+        }
+
+        private void SetStartUp(string appName)
+        {
+            string runKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+            Microsoft.Win32.RegistryKey? startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey);
+
+            startupKey?.Close();
+            startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey, true);
+            startupKey?.SetValue(appName, System.Windows.Forms.Application.ExecutablePath.ToString());
+            startupKey?.Close();
+        }
+
+        private bool CheckStartUp(string appName)
+        {
+            string runKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+            Microsoft.Win32.RegistryKey? startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey);
+            if (startupKey?.GetValue(appName) == null)
+                return false;
+            else
+                return true;
         }
 
         private void ToggleContent(object sender, RoutedEventArgs e)
