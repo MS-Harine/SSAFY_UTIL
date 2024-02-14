@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media.Animation;
 using SSAFY_Util.Utils;
-using APIService;
+using SSAFY_Util.Services.Crawler;
 
 namespace SSAFY_Util
 {

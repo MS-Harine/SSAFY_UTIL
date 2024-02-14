@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium.Chrome;
 
-namespace APIService
+namespace SSAFY_Util.Services.Crawler
 {
     public class APIBase
     {
@@ -12,7 +12,7 @@ namespace APIService
         {
             _driverService = ChromeDriverService.CreateDefaultService();
             _driverService.HideCommandPromptWindow = true;
-            
+
             _options = new ChromeOptions();
             _options.AddArgument("disable-gpu");
             _options.AddArgument("headless");

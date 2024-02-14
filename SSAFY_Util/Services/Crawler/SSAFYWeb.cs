@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace APIService
+namespace SSAFY_Util.Services.Crawler
 {
     public class SSAFYWeb : APIBase
     {
@@ -16,7 +16,7 @@ namespace APIService
 
         public bool Login(string? id, string? pw)
         {
-            if (id == null ||  pw == null) return false;
+            if (id == null || pw == null) return false;
 
             ChromeDriver _driver = GetDriver();
             _driver.Navigate().GoToUrl(BASE_URL);
@@ -50,7 +50,7 @@ namespace APIService
 
         public bool CheckLogin()
         {
-            if (!isLogin) 
+            if (!isLogin)
                 return Login(id, pw);
 
             if ((lastLogin - DateTime.Now)?.TotalMinutes > 10)
