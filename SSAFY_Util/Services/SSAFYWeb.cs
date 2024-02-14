@@ -48,7 +48,7 @@ namespace APIService
             return isLogin;
         }
 
-        private bool CheckLogin()
+        public bool CheckLogin()
         {
             if (!isLogin) 
                 return Login(id, pw);
@@ -96,6 +96,7 @@ namespace APIService
             try
             {
                 IWebElement checkInBtn = _driver.FindElement(By.Id(tag));
+                ClosePopup();
                 checkInBtn.Click();
                 result = true;
             }
@@ -103,9 +104,6 @@ namespace APIService
             {
                 result = false;
             }
-
-            if (result)
-                ClosePopup();
 
             return result;
         }

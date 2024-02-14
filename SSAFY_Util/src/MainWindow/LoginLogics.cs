@@ -27,7 +27,6 @@ namespace SSAFY_Util
             }
             LoginWindowSetup(true);
             UpdateCheckInOutTime();
-            
         }
 
         private void LogoutBtn_Click(object obj, RoutedEventArgs e)
