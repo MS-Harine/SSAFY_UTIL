@@ -4,12 +4,13 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
+using System.Windows;
 
 namespace SSAFY_Util.Services.AutoUpdater
 {
-    internal static class AutoUpdater
+    public partial class AutoUpdate : Window
     {
-        private static readonly Uri BaseURI = new("https://github.com/MS-Harine/SSAFY_UTIL/releases/latest/download");
+        private static readonly Uri BaseURI = new("https://github.com/MS-Harine/SSAFY_UTIL/releases/latest/download/");
         private static readonly string VersionFile = "version.json";
         private static readonly string UpdateFile = "ssafy_util.zip";
         private static readonly string UpdatePathName = "ssafy_util";
@@ -29,32 +30,79 @@ namespace SSAFY_Util.Services.AutoUpdater
             return result;
         }
 
-        public static async Task<Process> Update(Action<object?, System.EventArgs> callback)
+        public async void Update(Action<object?, System.EventArgs>? callback)
         {
             string tempPath = Path.GetTempPath();
             string filePath = Path.Combine(tempPath, UpdateFile);
             string unzipPath = Path.Combine(tempPath, UpdatePathName);
             string runnableFile = Path.Combine(tempPath, UpdatePathName, "setup.exe");
 
-            using (HttpClient client = new())
+            Thread thread = new Thread(async () =>
             {
-                HttpResponseMessage response = await client.GetAsync(new Uri(BaseURI, UpdateFile));
+                Thread.CurrentThread.IsBackground = true;
 
-                using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync())
-                using (FileStream fs = new(filePath, FileMode.OpenOrCreate))
+                using (HttpClient client = new())
                 {
-                    await streamToReadFrom.CopyToAsync(fs);
+                    DispatcherService.Invoke((System.Action)(() =>
+                    {
+                        logs.Add(new Log("Download update file: " + UpdateFile));
+                    }));
+                    HttpResponseMessage response = await client.GetAsync(new Uri(BaseURI, UpdateFile));
+
+                    using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync())
+                    using (FileStream fs = new(filePath, FileMode.OpenOrCreate))
+                    {
+                        await streamToReadFrom.CopyToAsync(fs);
+                    }
+                    DispatcherService.Invoke((System.Action)(() =>
+                    {
+                        logs.Add(new Log("Download Complete"));
+                    }));
                 }
-            }
 
-            ZipFile.ExtractToDirectory(filePath, unzipPath);
+                DispatcherService.Invoke((System.Action)(() =>
+                {
+                    logs.Add(new Log("Unzip the file: " + UpdateFile));
+                }));
+                if (Directory.Exists(unzipPath))
+                {
+                    Directory.Delete(unzipPath, true);
+                }
 
-            Process process = new();
-            process.StartInfo.FileName = runnableFile;
-            process.EnableRaisingEvents = true;
-            process.Exited += new EventHandler(callback);
-            process.Start();
-            return process;
+                Process unzip7z = new();
+                string args = "x -y \"-o" + unzipPath + "\" \"" + filePath + "\" ";
+                unzip7z.StartInfo.FileName = @"Services\7z\7za.exe";
+                unzip7z.StartInfo.Arguments = args;
+                unzip7z.Start();
+                unzip7z.WaitForExit();
+                if (unzip7z.ExitCode != 0)
+                {
+                    DispatcherService.Invoke((System.Action)(() =>
+                    {
+                        logs.Add(new Log($"Failed to Unzip with code {unzip7z.ExitCode}"));
+                    }));
+                    return;
+                }
+
+                DispatcherService.Invoke((System.Action)(() =>
+                {
+                    logs.Add(new Log("Unzip Complete"));
+                    logs.Add(new Log("Update & Restart"));
+                }));
+
+                Process process = new();
+                process.StartInfo.FileName = runnableFile;
+                process.EnableRaisingEvents = true;
+                if (callback != null)
+                    process.Exited += new EventHandler(callback);
+                process.Start();
+            });
+
+            await Task.Run(() =>
+            {
+                thread.Start();
+                thread.Join();
+            });
         }
     }
 }

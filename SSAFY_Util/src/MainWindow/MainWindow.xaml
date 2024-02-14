@@ -243,6 +243,11 @@
                                         HorizontalAlignment="Center" />
                         </Border>
                     </StackPanel>
+                    <TextBlock Text="Ver 1.0.0.1"
+                               x:Name="VersionInfo"
+                               FontSize="12"
+                               FontFamily="JUA"
+                               HorizontalAlignment="Right"/>
                     <TextBlock Text="Created by Harine"
                            FontSize="12"
                            FontFamily="JUA"

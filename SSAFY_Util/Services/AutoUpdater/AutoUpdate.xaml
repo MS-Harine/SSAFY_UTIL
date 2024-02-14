@@ -1,0 +1,25 @@
+﻿<Window x:Class="SSAFY_Util.Services.AutoUpdater.AutoUpdate"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SSAFY_Util.Services.AutoUpdater"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="AutoUpdate" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="0.9*" />
+        </Grid.RowDefinitions>
+        <TextBlock Text="Update Log" Foreground="Black" />
+        <ListView x:Name="LogEntryList" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="1" Foreground="Black" >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Timestamp}" />
+                    <GridViewColumn Header="Message" DisplayMemberBinding="{Binding Message}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
