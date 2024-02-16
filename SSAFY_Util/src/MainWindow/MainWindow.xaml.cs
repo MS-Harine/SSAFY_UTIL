@@ -140,6 +140,7 @@ namespace SSAFY_Util
 
         private bool CheckStartUp(string appName)
         {
+            Environment.GetFolderPath(Environment.SpecialFolder.Startup);
             string runKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
             Microsoft.Win32.RegistryKey? startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey);
             if (startupKey?.GetValue(appName) == null)
