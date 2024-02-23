@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SSAFY_UTIL (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "SSAFY_UTIL (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

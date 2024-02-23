@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="SSAFY_UTIL.View.SettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SSAFY_UTIL"
+    xmlns:lc="using:SSAFY_UTIL.View.Component"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel
+        Orientation="Vertical">
+        <TextBlock Text="설정" Style="{StaticResource MarginedTitleLargeTextBlockStyle}" />
+        <lc:Divider />
+        <lc:SettingItem 
+            Title="윈도우 시작 시 실행"
+            Caption="윈도우가 시작할 때 프로그램을 실행합니다.">
+            <lc:SettingItem.ActionContent>
+                <StackPanel Orientation="Horizontal">
+                    <ToggleSwitch 
+                        x:Name="RunOnStartupSwitch"
+                        OffContent="실행하지 않음" 
+                        OnContent="실행함" 
+                        IsOn="{x:Bind settings.RunOnStartup}"
+                        Toggled="RunOnStartupSwitch_Toggled"/>
+                </StackPanel>
+            </lc:SettingItem.ActionContent>
+        </lc:SettingItem>
+        <lc:SettingItem
+            Title="프로그램 캐시 삭제"
+            Caption="프로그램에 저장되어 있는 모든 정보를 삭제합니다.">
+            <lc:SettingItem.ActionContent>
+                <Button 
+                    Content="삭제하기"
+                    Click="DeleteCacheButton_Click"/>
+            </lc:SettingItem.ActionContent>
+        </lc:SettingItem>
+    </StackPanel>
+</Page>

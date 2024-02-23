@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application
+    x:Class="SSAFY_UTIL.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SSAFY_UTIL">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <!-- Other merged dictionaries here -->
+                <ResourceDictionary Source="Styles/TextBlockResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Other app resources here -->
+
+            <x:String x:Key="GitHubIconPath">M 12.8 0 L 10.2205 0.2601 L 7.8179 1.006 L 5.6436 2.1862 L 3.7492 3.7492 L 2.1862 5.6436 L 1.006 7.8179 L 0.2601 10.2205 L 0 12.8 L 0.6525 16.846 L 2.4694 20.3592 L 5.2402 23.1291 L 8.7539 24.9453 L 9.4306 24.808 L 9.6273 24.3297 L 9.6207 23.4248 L 9.6094 21.9469 L 7.4341 22.0373 L 6.1187 21.4822 L 5.4708 20.7821 L 5.2977 20.4375 L 4.8297 19.5214 L 4.3685 18.9473 L 3.8765 18.5656 L 3.3996 18.1092 L 3.4844 17.8789 L 3.7874 17.7975 L 3.9648 17.7875 L 4.8135 18.0311 L 5.4276 18.4803 L 5.8008 18.9127 L 5.9265 19.1063 L 6.8881 20.1437 L 7.9443 20.4941 L 8.923 20.4163 L 9.6516 20.1688 L 9.9646 19.1242 L 10.4641 18.4594 L 8.3543 18.0241 L 6.4833 17.0141 L 5.145 15.145 L 4.6336 12.1328 L 4.9854 10.2268 L 5.95 8.6976 L 5.7027 7.5419 L 5.7441 6.5357 L 6.0765 5.3086 L 6.2825 5.2808 L 6.9191 5.3438 L 8.0145 5.7173 L 9.5969 6.6211 L 12.8 6.1906 L 16.0047 6.6227 L 17.5845 5.7182 L 18.6791 5.3447 L 19.3157 5.2821 L 19.5219 5.3102 L 19.8557 6.5378 L 19.8977 7.5438 L 19.65 8.6976 L 20.6154 10.2269 L 20.9656 12.1328 L 20.4533 15.1497 L 19.1123 17.0164 L 17.2367 18.0206 L 15.1203 18.45 L 15.7276 19.3355 L 15.9891 20.8188 L 15.9805 23.0584 L 15.9719 24.3313 L 16.1693 24.8129 L 16.8531 24.9453 L 20.3641 23.1274 L 23.1326 20.3568 L 24.9481 16.8442 L 25.6 12.8 L 25.3399 10.2205 L 24.594 7.8179 L 23.4138 5.6436 L 21.8508 3.7492 L 19.9564 2.1862 L 17.7821 1.006 L 15.3795 0.2601 L 12.8 0 z</x:String>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
