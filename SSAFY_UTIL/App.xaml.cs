@@ -44,13 +44,15 @@ namespace SSAFY_UTIL
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
+            HomePage homepage = new();
+            homepage.NavigateTo(typeof(AttendancePage));
+
             m_window = new Window
             {
                 SystemBackdrop = new MicaBackdrop(),
                 ExtendsContentIntoTitleBar = true,
             };
-
-            m_window.Content = new HomePage();
+            m_window.Content = homepage;
             m_window.Activate();
         }
 

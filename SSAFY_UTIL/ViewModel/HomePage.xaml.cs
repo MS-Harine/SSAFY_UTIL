@@ -32,6 +32,19 @@ namespace SSAFY_UTIL.View
             InitializeComponent();
         }
 
+        public void NavigateTo(Type pageType)
+        {
+            foreach(var menuItem in NavigationViewControl.MenuItems)
+            {
+                if (((NavigationViewItem)menuItem).Tag + "Page" == pageType.Name)
+                {
+                    NavigationViewControl.SelectedItem = menuItem;
+                    break;
+                }
+            }
+            rootFrame.Navigate(pageType);
+        }
+
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
             if (args.IsSettingsSelected)
