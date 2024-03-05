@@ -18,9 +18,13 @@
         <Setter Property="Margin" Value="{StaticResource BaseMargin}" />
     </Style>
 
-    <Style x:Key="MarginedBodyLargeTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+    <Style x:Key="BodyLargeTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="LineHeight" Value="28" />
+    </Style>
+
+    <Style x:Key="MarginedBodyLargeTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyLargeTextBlockStyle}">
         <Setter Property="Margin" Value="{StaticResource BaseMargin}" />
-        <Setter Property="FontSize" Value="18" />
     </Style>
 
     <Style x:Key="MarginedSubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">

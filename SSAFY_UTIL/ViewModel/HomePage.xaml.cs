@@ -34,14 +34,29 @@ namespace SSAFY_UTIL.View
 
         public void NavigateTo(Type pageType)
         {
-            foreach(var menuItem in NavigationViewControl.MenuItems)
+            bool state = false;
+            foreach (var menuItem in NavigationViewControl.MenuItems)
             {
                 if (((NavigationViewItem)menuItem).Tag + "Page" == pageType.Name)
                 {
+                    state = true;
                     NavigationViewControl.SelectedItem = menuItem;
                     break;
                 }
             }
+            if (!state)
+            {
+                foreach (var menuItem in NavigationViewControl.FooterMenuItems)
+                {
+                    if (((NavigationViewItem)menuItem).Tag + "Page" == pageType.Name)
+                    {
+                        state = true;
+                        NavigationViewControl.SelectedItem = menuItem;
+                        break;
+                    }
+                }
+            }
+
             rootFrame.Navigate(pageType);
         }
 

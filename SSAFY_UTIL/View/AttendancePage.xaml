@@ -8,5 +8,400 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <TextBlock Text="AttendancePage" />
+    <ScrollView
+        Padding="0,0,10,0">
+        <StackPanel
+            Orientation="Vertical">
+            <TextBlock
+                x:Name="Today"
+                Margin="0,0,0,18"
+                Style="{ThemeResource TitleLargeTextBlockStyle}"
+                Text="1월 1일 월요일" />
+            <Grid
+                RowSpacing="8"
+                ColumnSpacing="8"
+                Margin="0,0,0,18">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.2*" />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.RowSpan="2"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="0, 20"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                    <StackPanel
+                        Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                        <TextBlock
+                            x:Name="RoomInText"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Style="{ThemeResource BodyLargeTextBlockStyle}"
+                            Text="입실 시간" />
+                        <TextBlock
+                            x:Name="RoomInTime"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Style="{ThemeResource TitleTextBlockStyle}"
+                            Text="00:00" />
+                    </StackPanel>
+                </Border>
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="0, 20"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                    <StackPanel
+                        Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                        <TextBlock
+                            x:Name="RoomOutText"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Style="{ThemeResource BodyLargeTextBlockStyle}"
+                            Text="퇴실 시간" />
+                        <TextBlock
+                            x:Name="RoomOutTime"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Style="{ThemeResource TitleTextBlockStyle}"
+                            Text="00:00" />
+                    </StackPanel>
+                </Border>
+                <Button
+                    x:Name="RoomInButton"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Style="{ThemeResource AccentButtonStyle}"
+                    Content="입실하기" />
+                <Button
+                    x:Name="RoomOutButton"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Style="{ThemeResource AccentButtonStyle}"
+                    IsEnabled="False"
+                    Content="퇴실하기" />
+            </Grid>
+            <Grid
+                ColumnSpacing="8"
+                RowSpacing="8"
+                Margin="0,0,0,18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.7*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border
+                    Grid.Column="0"
+                    Grid.RowSpan="2"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="20, 20"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                    <StackPanel
+                        Orientation="Vertical">
+                        <TextBlock
+                            Margin="0,0,0,12"
+                            HorizontalAlignment="Center"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="이번달 출결현황" />
+                        <Border
+                            CornerRadius="10"
+                            HorizontalAlignment="Left"
+                            Padding="15,2"
+                            Margin="0,0,0,8"
+                            Background="#3395f4">
+                            <TextBlock
+                                Foreground="White"
+                                Style="{ThemeResource BodyStrongTextBlockStyle}">
+                                <Run Text="출석" />
+                                <Run 
+                                    x:Name="AttendanceCount"
+                                    Text="1" />
+                            </TextBlock>
+                        </Border>
+                        <Grid 
+                            RowSpacing="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.5*" />
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.1*" />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                CornerRadius="5"
+                                Background="#3395f4" />
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="정상출석" />
+                            <TextBlock
+                                x:Name="AttendanceNormal"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="1일" />
+                            <Border
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                CornerRadius="5"
+                                Background="#ffaa23" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="지각" />
+                            <TextBlock
+                                x:Name="AttendanceTardy"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="1일" />
+                            <Border
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                CornerRadius="5"
+                                Background="#ffaa23" />
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="조퇴" />
+                            <TextBlock
+                                x:Name="AttendanceLeaveEarly"
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="1일" />
+                            <Border
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                CornerRadius="5"
+                                Background="#ffaa23" />
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="외출" />
+                            <TextBlock
+                                x:Name="AttendanceOuting"
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="1일" />
+                        </Grid>
+                        <Border
+                            CornerRadius="10"
+                            HorizontalAlignment="Left"
+                            Padding="15,2"
+                            Margin="0,18,0,8"
+                            Background="#ec2c54">
+                            <TextBlock
+                                Foreground="White"
+                                Style="{ThemeResource BodyStrongTextBlockStyle}">
+                                <Run Text="결석" />
+                                <Run 
+                                    x:Name="AttendanceAbsentCount"
+                                    Text="1" />
+                            </TextBlock>
+                        </Border>
+                        <Grid 
+                            RowSpacing="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.4*" />
+                                <ColumnDefinition Width="0.3*" />
+                                <ColumnDefinition Width="0.1*" />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                CornerRadius="5"
+                                Background="#ff7522" />
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="공가" />
+                            <TextBlock
+                                x:Name="AttendanceCertifiedAbsent"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="1일" />
+                            <Border
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                CornerRadius="5"
+                                Background="#ff7522" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="사유결석" />
+                            <TextBlock
+                                x:Name="AttendanceResonableAbsent"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="1일" />
+                            <Border
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Width="10"
+                                Height="10"
+                                CornerRadius="5"
+                                Background="#ec2c54" />
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="임의결석" />
+                            <TextBlock
+                                x:Name="AttendanceAbsent"
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="1일" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <Border
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                    <Grid
+                        Padding="20, 10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Style="{ThemeResource BodyTextBlockStyle}"
+                            Text="예상 교육지원금 수령금액" />
+                        <TextBlock
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}">
+                            <Run Text="KRW" />
+                            <Run Text="1,000,000" />
+                        </TextBlock>
+                    </Grid>
+                </Border>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                    <StackPanel
+                        Orientation="Vertical"
+                        Padding="20,10">
+                        <Grid>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="설문조사" />
+                            <Button
+                                x:Name="SurveyRefreshButton"
+                                Padding="5"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                ToolTipService.ToolTip="새로고침">
+                                <FontIcon FontSize="14" Glyph="&#xE72C;" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <Button
+                x:Name="EduSSAFYSiteButton"
+                Grid.Column="0"
+                Grid.RowSpan="2"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="20, 20"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <Button.Content>
+                    <Grid HorizontalAlignment="Stretch">
+                        <TextBlock
+                            HorizontalAlignment="Left"
+                            Style="{ThemeResource BodyTextBlockStyle}"
+                            Text="EDU SSAFY 사이트 바로가기" />
+                        <FontIcon
+                            HorizontalAlignment="Right"
+                            Glyph="&#xE71B;" />
+                    </Grid>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+    </ScrollView>
 </Page>

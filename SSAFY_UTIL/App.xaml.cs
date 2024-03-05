@@ -28,6 +28,7 @@ namespace SSAFY_UTIL
     public partial class App : Application
     {
         private Window m_window;
+        public Window Window => m_window;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
