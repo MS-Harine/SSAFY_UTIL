@@ -163,7 +163,7 @@ namespace SSAFY_UTIL.Service
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
 
-            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='inRoomEnd']");
+            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='state inRoomEnd']");
             if (node == null)
             {
                 return (string.Empty, string.Empty);
@@ -186,7 +186,7 @@ namespace SSAFY_UTIL.Service
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
 
-            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='outRoomEnd']");
+            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='state outRoomEnd']");
             if (node == null)
             {
                 return (string.Empty, string.Empty);
@@ -203,8 +203,14 @@ namespace SSAFY_UTIL.Service
 
         public async Task<string> GetExpectedPay(int month)
         {
-            List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
-            List<KeyValuePair<string, string>> body = new() { new("attdYrM", DateTime.Now.Year.ToString() + month.ToString("00")) };
+            var (CsrfHeader, CsrfToken) = await GetCsrfToken(HOME_URL);
+            List<KeyValuePair<string, string>> headers = new() { 
+                new("Accept", "*/*"), 
+                new(CsrfHeader, CsrfToken) 
+            };
+            List<KeyValuePair<string, string>> body = new() { 
+                new("attdYrM", DateTime.Now.Year.ToString() + month.ToString("00")) 
+            };
 
             var (_, Response) = await PostAsString(ATTENDANCE_CONFIRM_URL, null, body, headers);
 
@@ -220,8 +226,8 @@ namespace SSAFY_UTIL.Service
 
             string content = node.InnerText;
             Regex regex = new(@"\((.*)\)");
-            Match match = regex.Match(content);
-            string pay = match.Groups[1].Value.Trim();
+            MatchCollection match = regex.Matches(content);
+            string pay = match[1].Groups[1].Value.Trim();
             return pay;
         }
 
@@ -253,6 +259,42 @@ namespace SSAFY_UTIL.Service
             result.Add("LevelPoint", studentLevelPoint);
             result.Add("Location", studentLocation);
             result.Add("Class", studentClass);
+            return result;
+        }
+
+        public async Task<JObject> GetAttendance()
+        {
+            HtmlDocument htmlDoc = new();
+            List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
+
+            var (_, content) = await GetAsString(ATTENDANCE_URL, null, headers);
+            htmlDoc.LoadHtml(content);
+
+            JObject result = new();
+            result.Add("AttendanceCount", htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/p/em").InnerText.Trim());
+            result.Add("AttendanceNormal", htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/ul[1]/li[1]/span[2]/em").InnerText.Trim());
+
+            Regex regex = new(@"(?<num>\d+)회");
+            string reasonable = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/table/tr[2]/td[2]").InnerText.Trim();
+            string nonreasonable = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/table/tr[2]/td[3]").InnerText.Trim();
+            int tardy = Int32.Parse(regex.Match(reasonable).Groups[1].Value) + Int32.Parse(regex.Match(nonreasonable).Groups[1].Value);
+            result.Add("AttendanceTardy", tardy.ToString());
+
+            reasonable = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/table/tr[3]/td[2]").InnerText.Trim();
+            nonreasonable = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/table/tr[3]/td[3]").InnerText.Trim();
+            int leaveEarly = Int32.Parse(regex.Match(reasonable).Groups[1].Value) + Int32.Parse(regex.Match(nonreasonable).Groups[1].Value);
+            result.Add("AttendanceLeaveEarly", leaveEarly.ToString());
+
+            reasonable = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/table/tr[4]/td[2]").InnerText.Trim();
+            nonreasonable = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[1]/table/tr[4]/td[3]").InnerText.Trim();
+            int outing = Int32.Parse(regex.Match(reasonable).Groups[1].Value) + Int32.Parse(regex.Match(nonreasonable).Groups[1].Value);
+            result.Add("AttendanceOuting", outing.ToString());
+
+            result.Add("AttendanceAbsentCount", htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[2]/p/em").InnerText.Trim());
+            result.Add("AttendanceCertifiedAbsent", htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[2]/ul/li[1]/span[2]/em").InnerText.Trim());
+            result.Add("AttendanceResonableAbsent", htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[2]/ul/li[2]/span[2]/em").InnerText.Trim());
+            result.Add("AttendanceAbsent", htmlDoc.DocumentNode.SelectSingleNode("//div[@class='total total-new']/div[2]/ul/li[3]/span[2]/em").InnerText.Trim());
+
             return result;
         }
 

@@ -109,8 +109,26 @@
                     Content="계정관리" 
                     Icon="Contact" />
             </NavigationView.FooterMenuItems>
-            <Frame x:Name="rootFrame"
-                   Padding="56"/>
+
+            <Grid>
+                <Grid 
+                    x:Name="Modal"
+                    Background="Black"
+                    Visibility="Collapsed"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Opacity="0.4">
+                    <ProgressRing
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        IsActive="True"
+                        Height="100"
+                        Width="100" />
+                </Grid>
+                <Frame 
+                    x:Name="rootFrame"
+                    Padding="56"/>
+            </Grid>
         </NavigationView>
     </Grid>
 </Page>

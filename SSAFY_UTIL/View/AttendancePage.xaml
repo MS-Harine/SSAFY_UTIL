@@ -92,6 +92,7 @@
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch"
                     Style="{ThemeResource AccentButtonStyle}"
+                    Click="RoomInButtonClick"
                     Content="입실하기" />
                 <Button
                     x:Name="RoomOutButton"
@@ -100,6 +101,7 @@
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch"
                     Style="{ThemeResource AccentButtonStyle}"
+                    Click="RoomOutButtonClick"
                     IsEnabled="False"
                     Content="퇴실하기" />
             </Grid>
@@ -348,7 +350,9 @@
                             HorizontalAlignment="Right"
                             Style="{ThemeResource BodyStrongTextBlockStyle}">
                             <Run Text="KRW" />
-                            <Run Text="1,000,000" />
+                            <Run 
+                                x:Name="ExpectedPay"
+                                Text="1,000,000" />
                         </TextBlock>
                     </Grid>
                 </Border>

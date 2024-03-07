@@ -1,4 +1,5 @@
-﻿using SSAFY_UTIL.Service;
+﻿using Newtonsoft.Json.Linq;
+using SSAFY_UTIL.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,7 @@ namespace SSAFY_UTIL.Model
         public static LoginInfo Instance { get { return lazy.Value; } }
         private LoginInfo() { }
 
-        private string LoginId
-        {
-            get => (string)LocalStorage.GetValue("id", "");
-            set => LocalStorage.SetValue("id", value);
-        }
-        private string LoginPw
-        {
-            get => (string)LocalStorage.GetValue("pw", "");
-            set => LocalStorage.SetValue("pw", value);
-        }
+        private readonly string LOGININFO_KEY = "loginInfo";
         public bool IsDataExist
         {
             get => (bool)LocalStorage.GetValue("autoLogin", false);
@@ -31,24 +23,32 @@ namespace SSAFY_UTIL.Model
 
         public void SetLoginInfo(string id, string pw)
         {
-            LoginId = id;
-            LoginPw = pw;
+            JObject info = new();
+            info.Add("LoginId", id);
+            info.Add("LoginPw", pw);
+            LocalStorage.SetValue(LOGININFO_KEY, info.ToString());
             IsDataExist = true;
         }
 
         public (string, string) GetLoginInfo()
         {
-            string id = LoginId;
-            string pw = LoginPw;
+            string infoString = (string)LocalStorage.GetValue(LOGININFO_KEY);
+            string id = String.Empty;
+            string pw = String.Empty;
+
+            if (infoString != null)
+            {
+                JObject info = JObject.Parse(infoString);
+                id = info["LoginId"].ToString();
+                pw = info["LoginPw"].ToString();
+            }
             return (id, pw);
         }
 
         public void Clear()
         {
-            LocalStorage.Clear("id");
-            LocalStorage.Clear("pw");
+            LocalStorage.Clear(LOGININFO_KEY);
             LocalStorage.Clear("autoLogin");
-            IsDataExist = false;
         }
     }
 }

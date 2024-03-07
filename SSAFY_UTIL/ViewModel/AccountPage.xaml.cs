@@ -24,12 +24,13 @@ namespace SSAFY_UTIL.View
     /// </summary>
     public sealed partial class AccountPage : Page
     {
-        private WebSsafy WebHelper = WebSsafy.Instance;
-        private LoginInfo LoginHelper = LoginInfo.Instance;
+        private HomePage window = ((Application.Current as App)?.Window.Content as HomePage);
         private ContentDialog LoginDialog = new();
         private LoginForm LoginDialogContent = new();
 
-        private readonly string USERINFO_KEY = "studentInfo";
+        private WebSsafy WebHelper = WebSsafy.Instance;
+        private LoginInfo LoginModel = LoginInfo.Instance;
+        private UserInfo UserModel = UserInfo.Instance;
 
         public AccountPage()
         {
@@ -47,9 +48,9 @@ namespace SSAFY_UTIL.View
                 return;
             }
 
-            if (LoginHelper.IsDataExist)
+            if (LoginModel.IsDataExist)
             {
-                var (id, pw) = LoginHelper.GetLoginInfo();
+                var (id, pw) = LoginModel.GetLoginInfo();
                 loginResult = await WebHelper.Login(id, pw);
             }
 
@@ -61,11 +62,14 @@ namespace SSAFY_UTIL.View
                     var (id, pw, autoLogin) = LoginDialogContent.GetInfo();
                     if (LoginDialogContent.IsValid())
                     {
-                        loginResult = await WebHelper.Login(id, pw);
-                        if (loginResult && autoLogin)
-                            LoginHelper.SetLoginInfo(id, pw);
+                        await window.LoadingTask(async () =>
+                        {
+                            loginResult = await WebHelper.Login(id, pw);
+                            if (loginResult && autoLogin)
+                                LoginModel.SetLoginInfo(id, pw);
 
-                        LoginDialogContent.SetValidation(loginResult);
+                            LoginDialogContent.SetValidation(loginResult);
+                        });
                     }
                 }
                 else
@@ -83,9 +87,9 @@ namespace SSAFY_UTIL.View
             bool result = await WebHelper.Logout();
             if (result)
             {
-                LoginHelper.Clear();
+                LoginModel.Clear();
+                UserModel.Clear();
                 SetUserInfoUI(false);
-                LocalStorage.Clear(USERINFO_KEY);
             }
         }
 
@@ -93,13 +97,11 @@ namespace SSAFY_UTIL.View
         {
             if (isLogined)
             {
-                string? infoString = (string?)LocalStorage.GetValue(USERINFO_KEY);
-                JObject? info = infoString == null ? null : JObject.Parse(infoString);
-                if (info == null || (DateTime.Now - info["LastTime"].ToObject<DateTime>()).TotalMinutes > 10)
+                JObject? info = UserModel.GetUserInfo();
+                if (info == null)
                 {
                     info = await WebHelper.GetStudentInfo();
-                    info.Add("LastTime", DateTime.Now);
-                    LocalStorage.SetValue(USERINFO_KEY, info.ToString());
+                    UserModel.SetUserInfo(info);
                 }
                 
                 StudentName.Text = info["Name"].ToString();
@@ -112,7 +114,6 @@ namespace SSAFY_UTIL.View
 
                 LoginButton.Visibility = Visibility.Collapsed;
                 LogoutButton.Visibility = Visibility.Visible;
-
                 LoginDialogContent.ClearInputs();
             }
             else

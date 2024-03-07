@@ -7,11 +7,15 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using SSAFY_UTIL.Model;
+using SSAFY_UTIL.Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -27,9 +31,36 @@ namespace SSAFY_UTIL.View
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        private LoginInfo LoginHelper = LoginInfo.Instance;
+        private WebSsafy WebHelper = WebSsafy.Instance;
+
         public HomePage()
         {
             InitializeComponent();
+            LoadingTask(CheckLogin);
+        }
+
+        private async void CheckLogin()
+        {
+            if (LoginHelper.IsDataExist)
+            {
+                var (id, pw) = LoginHelper.GetLoginInfo();
+                await WebHelper.Login(id, pw);
+            }
+        }
+
+        public async Task LoadingTask(Func<Task> callback)
+        {
+            Modal.Visibility = Visibility.Visible;
+            await callback();
+            Modal.Visibility = Visibility.Collapsed;
+        }
+
+        public void LoadingTask(Action callback)
+        {
+            Modal.Visibility = Visibility.Visible;
+            callback();
+            Modal.Visibility = Visibility.Collapsed;
         }
 
         public void NavigateTo(Type pageType)

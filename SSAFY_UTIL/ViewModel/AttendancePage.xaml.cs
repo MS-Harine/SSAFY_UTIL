@@ -5,6 +5,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Newtonsoft.Json.Linq;
+using SSAFY_UTIL.Model;
 using SSAFY_UTIL.Service;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ namespace SSAFY_UTIL.View
     public sealed partial class AttendancePage : Page
     {
         private WebSsafy WebHelper = WebSsafy.Instance;
+        private UserInfo UserModel = UserInfo.Instance;
 
         public AttendancePage()
         {
@@ -44,12 +47,121 @@ namespace SSAFY_UTIL.View
                     var homepage = (Application.Current as App)?.Window.Content as HomePage;
                     homepage.NavigateTo(typeof(AccountPage));
                 }
+                else
+                {
+                    InitializeUI();
+                }
             };
         }
 
-        private void SetRoomInTime()
+        private async void InitializeUI()
         {
+            Today.Text = DateTime.Now.ToString("M岿 d老 dddd");
+            JObject? cache = UserModel.GetUserAttendance();
 
+            string roomInTime = String.Empty, roomInText = String.Empty;
+            string roomOutTime = String.Empty, roomOutText = String.Empty;
+            string expectedPay = String.Empty;
+
+            if (cache == null)
+            {
+                (roomInTime, roomInText) = await WebHelper.CheckInTime();
+                if (roomInTime != String.Empty)
+                {
+                    (roomOutTime, roomOutText) = await WebHelper.CheckOutTime();
+                }
+                expectedPay = await WebHelper.GetExpectedPay(DateTime.Now.Month);
+                JObject attendance = await WebHelper.GetAttendance();
+
+                cache = new()
+                {
+                    { "roomInTime", roomInTime },
+                    { "roomInText", roomInText },
+                    { "roomOutTime", roomOutTime },
+                    { "roomOutText", roomOutText },
+                    { "expectedPay", expectedPay },
+                    { "AttendanceCount", attendance["AttendanceCount"] },
+                    { "AttendanceNormal", attendance["AttendanceNormal"] },
+                    { "AttendanceTardy", attendance["AttendanceTardy"] },
+                    { "AttendanceLeaveEarly", attendance["AttendanceLeaveEarly"] },
+                    { "AttendanceOuting", attendance["AttendanceOuting"] },
+                    { "AttendanceAbsentCount", attendance["AttendanceAbsentCount"] },
+                    { "AttendanceCertifiedAbsent", attendance["AttendanceCertifiedAbsent"] },
+                    { "AttendanceResonableAbsent", attendance["AttendanceResonableAbsent"] },
+                    { "AttendanceAbsent", attendance["AttendanceAbsent"] },
+                };
+                UserModel.SetUserAttendance(cache);
+            }
+            else
+            {
+                roomInTime = cache["roomInTime"].ToString();
+                roomInText = cache["roomInText"].ToString();
+                roomOutTime = cache["roomOutTime"].ToString();
+                roomOutText = cache["roomOutText"].ToString();
+                expectedPay = cache["expectedPay"].ToString();
+            }
+
+            if (roomInTime != String.Empty)
+            {
+                RoomInText.Text = roomInText;
+                RoomInTime.Text = roomInTime;
+                RoomInButton.IsEnabled = false;
+                RoomOutButton.IsEnabled = true;
+            }
+            else
+            {
+                RoomInButton.IsEnabled = true;
+                RoomOutButton.IsEnabled = false;
+            }
+
+            if (roomOutTime != String.Empty)
+            {
+                RoomOutText.Text = roomOutText;
+                RoomOutTime.Text = roomOutTime;
+            }
+            ExpectedPay.Text = expectedPay;
+
+            AttendanceCount.Text = cache["AttendanceCount"].ToString();
+            AttendanceNormal.Text = cache["AttendanceNormal"].ToString() + "老";
+            AttendanceTardy.Text = cache["AttendanceTardy"].ToString() + "老";
+            AttendanceLeaveEarly.Text = cache["AttendanceLeaveEarly"].ToString() + "老";
+            AttendanceOuting.Text = cache["AttendanceOuting"].ToString() + "老";
+            AttendanceAbsentCount.Text = cache["AttendanceAbsentCount"].ToString();
+            AttendanceCertifiedAbsent.Text = cache["AttendanceCertifiedAbsent"].ToString() + "老";
+            AttendanceResonableAbsent.Text = cache["AttendanceResonableAbsent"].ToString() + "老";
+            AttendanceAbsent.Text = cache["AttendanceAbsent"].ToString() + "老";
+        }
+
+        private async void RoomInButtonClick(object sender, RoutedEventArgs args)
+        {
+            bool result = await WebHelper.CheckIn();
+            if (!result)
+                return;
+
+            var (roomInTime, roomInText) = await WebHelper.CheckInTime();
+            JObject cache = UserModel.GetUserAttendance() ?? new();
+            cache["roomInTime"] = roomInTime;
+            cache["roomInText"] = roomInText;
+            UserModel.SetUserAttendance(cache);
+
+            RoomInText.Text = roomInText;
+            RoomInTime.Text = roomInTime;
+        }
+
+        private async void RoomOutButtonClick(object sender, RoutedEventArgs args)
+        {
+            bool result = await WebHelper.CheckOut();
+            if (!result)
+                return;
+
+            var (roomOutTime, roomOutText) = await WebHelper.CheckOutTime();
+            JObject cache = UserModel.GetUserAttendance() ?? new();
+            cache["roomOutTime"] = roomOutTime;
+            cache["roomOutText"] = roomOutText;
+            UserModel.SetUserAttendance(cache);
+
+            RoomOutText.Text = roomOutText;
+            RoomOutTime.Text = roomOutTime;
         }
     }
 }
