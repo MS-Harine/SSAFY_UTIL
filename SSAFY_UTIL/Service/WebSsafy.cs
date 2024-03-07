@@ -24,6 +24,7 @@ namespace SSAFY_UTIL.Service
         private readonly string CHECKOUT_URL = "edu/mycampus/attendance/attendanceClassCheckOut.do";
         private readonly string ATTENDANCE_URL = "edu/mycampus/attendance/attendanceClassList.do";
         private readonly string ATTENDANCE_CONFIRM_URL = "edu/mycampus/attendance/attendanceConfirm.do";
+        private readonly string CLASS_URL = "edu/community/search/searchStudentList.do";
 
         private DateTime LastLogin = new(0);
         private bool isLogin = false;
@@ -32,7 +33,7 @@ namespace SSAFY_UTIL.Service
             get
             {
                 TimeSpan timeDiff = DateTime.Now - LastLogin;
-                bool isvalid = timeDiff.TotalMinutes > 10;
+                bool isvalid = timeDiff.TotalMinutes < 10;
                 if (!isvalid)
                 {
                     isLogin = false;
@@ -56,9 +57,11 @@ namespace SSAFY_UTIL.Service
 
         public async Task<bool> Login(string id, string pw)
         {
-            JObject LoginInfo = new();
-            LoginInfo.Add("userId", id);
-            LoginInfo.Add("userPwd", pw);
+            List<KeyValuePair<string, string>> LoginInfo = new()
+            {
+                new("userId", id),
+                new("userPwd", pw),
+            };
 
             var (CsrfHeader, CsrfToken) = await GetCsrfToken(LOGINFORM_URL);
             List<KeyValuePair<string, string>> headers = new()
@@ -66,7 +69,7 @@ namespace SSAFY_UTIL.Service
                 new(CsrfHeader, CsrfToken)
             };
 
-            var (StatusCode, Response) = await PostAsString(LOGIN_URL, null, LoginInfo.ToString(), headers);
+            var (StatusCode, Response) = await PostAsString(LOGIN_URL, null, LoginInfo, headers);
             if (StatusCode == HttpStatusCode.Forbidden)
             {
                 ExceptionHandler.ErrorMessage("Invalid CSRF Token");
@@ -74,7 +77,10 @@ namespace SSAFY_UTIL.Service
             }
 
             JObject JsonResponse = JObject.Parse(Response);
-            return JsonResponse["status"]?.ToString() == "success";
+            bool result = JsonResponse["status"]?.ToString() == "success";
+            if (result)
+                IsLogin = true;
+            return result;
         }
 
         public async Task<bool> Logout()
@@ -94,6 +100,10 @@ namespace SSAFY_UTIL.Service
             }
             else if (StatusCode == HttpStatusCode.Redirect)
                 result = true;
+
+            if (result)
+                IsLogin = false;
+
             return result;
         }
 
@@ -147,16 +157,13 @@ namespace SSAFY_UTIL.Service
 
         public async Task<(string, string)> CheckInTime()
         {
-            List<KeyValuePair<string, string>> headers = new()
-            {
-                new("Accept", "*/*")
-            };
+            List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
             var (_, Response) = await GetAsString(HOME_URL, null, headers);
 
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
 
-            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'inRoomEnd')]");
+            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='inRoomEnd']");
             if (node == null)
             {
                 return (string.Empty, string.Empty);
@@ -173,16 +180,13 @@ namespace SSAFY_UTIL.Service
 
         public async Task<(string, string)> CheckOutTime()
         {
-            List<KeyValuePair<string, string>> headers = new()
-            {
-                new("Accept", "*/*")
-            };
+            List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
             var (_, Response) = await GetAsString(HOME_URL, null, headers);
 
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
 
-            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'outRoomEnd')]");
+            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='outRoomEnd']");
             if (node == null)
             {
                 return (string.Empty, string.Empty);
@@ -199,18 +203,15 @@ namespace SSAFY_UTIL.Service
 
         public async Task<string> GetExpectedPay(int month)
         {
-            List<KeyValuePair<string, string>> headers = new()
-            {
-                new("Accept", "*/*")
-            };
-            JObject body = new();
-            body.Add("attdYrM", DateTime.Now.Year.ToString() + month.ToString("00"));
-            var (_, Response) = await PostAsString(ATTENDANCE_CONFIRM_URL, null, body.ToString(), headers);
+            List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
+            List<KeyValuePair<string, string>> body = new() { new("attdYrM", DateTime.Now.Year.ToString() + month.ToString("00")) };
+
+            var (_, Response) = await PostAsString(ATTENDANCE_CONFIRM_URL, null, body, headers);
 
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
 
-            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'confirmArea')]/table[1]/tbody/tr[2]/td[2]/text()[2]");
+            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='confirmArea']/table[1]/tbody/tr[2]/td[2]/text()[2]");
             if (node == null)
             {
                 ExceptionHandler.ErrorMessage("Error is occurred while getting expected payment.");
@@ -218,10 +219,41 @@ namespace SSAFY_UTIL.Service
             }
 
             string content = node.InnerText;
-            Regex regex = new Regex(@"\((.*)\)");
+            Regex regex = new(@"\((.*)\)");
             Match match = regex.Match(content);
             string pay = match.Groups[1].Value.Trim();
             return pay;
+        }
+
+        public async Task<JObject> GetStudentInfo()
+        {
+            HtmlDocument htmlDoc = new();
+            List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
+           
+            var (_, Response) = await GetAsString(HOME_URL, null, headers);
+            htmlDoc.LoadHtml(Response);
+            string studentNumber = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='profile-area']/div[1]/a/div/span[1]").InnerText.Trim();
+            string studentName = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='profile-area']/div[1]/a/div/span[2]/em").InnerText.Trim();
+            string studentMileage = htmlDoc.DocumentNode.SelectSingleNode("//section[@class='main-page sec1']/div/div[2]/div[1]/header/dl[1]/dd").InnerText.Trim();
+            string studentLevelPoint = htmlDoc.DocumentNode.SelectSingleNode("//section[@class='main-page sec1']/div/div[2]/div[1]/header/dl[2]/dd").InnerText.Trim();
+            string studentLevel = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='my-level']/div/p/span").InnerText.Trim();
+            studentLevel = Regex.Replace(studentLevel, @"\s+", " ");
+
+            (_, Response) = await GetAsString(CLASS_URL, null, headers);
+            htmlDoc.LoadHtml(Response);
+            string studentLocationClass = htmlDoc.DocumentNode.SelectSingleNode("//article/div[1]/h3/span[2]").InnerText.Trim();
+            string studentLocation = studentLocationClass[..2];
+            string studentClass = studentLocationClass[2..];
+
+            JObject result = new();
+            result.Add("Number", studentNumber);
+            result.Add("Name", studentName);
+            result.Add("Mileage", studentMileage);
+            result.Add("Level", studentLevel);
+            result.Add("LevelPoint", studentLevelPoint);
+            result.Add("Location", studentLocation);
+            result.Add("Class", studentClass);
+            return result;
         }
 
         private async Task<(string, string)> GetCsrfToken(string Url)

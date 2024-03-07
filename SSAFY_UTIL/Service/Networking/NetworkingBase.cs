@@ -15,7 +15,12 @@ namespace SSAFY_UTIL.Service.Networking
 
         protected NetworkingBase(Uri uri, List<KeyValuePair<string, string>>? headers)
         {
-            client = new()
+            HttpClientHandler httpClientHandler = new()
+            {
+                AllowAutoRedirect = false
+            };
+
+            client = new(httpClientHandler)
             {
                 BaseAddress = uri,
             };
@@ -62,7 +67,7 @@ namespace SSAFY_UTIL.Service.Networking
         protected async Task<(HttpStatusCode, string)> PostAsString(
             string path,
             List<KeyValuePair<string, string>>? parameters,
-            string? body,
+            List<KeyValuePair<string, string>>? body,
             List<KeyValuePair<string, string>>? headers)
         {
             if (parameters != null)
@@ -85,7 +90,7 @@ namespace SSAFY_UTIL.Service.Networking
 
                 if (body != null)
                 {
-                    requestMessage.Content = new StringContent(body, Encoding.UTF8, "application/json");
+                    requestMessage.Content = new FormUrlEncodedContent(body);
                 }
                 response = await client.SendAsync(requestMessage);
             }

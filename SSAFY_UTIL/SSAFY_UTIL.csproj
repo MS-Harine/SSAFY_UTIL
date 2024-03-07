@@ -20,6 +20,7 @@
     <None Remove="View\GithubPage.xaml" />
     <None Remove="View\HomePage.xaml" />
     <None Remove="View\LaunchPage.xaml" />
+    <None Remove="View\LoginForm.xaml" />
     <None Remove="View\SettingPage.xaml" />
   </ItemGroup>
 
@@ -52,7 +53,11 @@
   <ItemGroup>
     <Folder Include="Assets\Images\" />
     <Folder Include="Styles\" />
-    <Folder Include="Service\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\LoginForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\Component\SettingItem.xaml">

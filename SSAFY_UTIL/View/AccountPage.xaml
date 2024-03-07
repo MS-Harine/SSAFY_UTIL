@@ -8,5 +8,201 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <TextBlock Text="AccountPage" />
+    <StackPanel
+        Orientation="Vertical"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+        <Border
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            BorderThickness="1"
+            CornerRadius="10"
+            Padding="28"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            Margin="0,0,0,24">
+            <Grid
+                ColumnSpacing="8"
+                RowSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,12">
+                    <FontIcon
+                        Margin="0,0,12,0"
+                        FontSize="48"
+                        Glyph="&#xE77B;" />
+                    <TextBlock
+                        x:Name="StudentName"
+                        Style="{ThemeResource TitleLargeTextBlockStyle}"
+                        Text="김싸피" />
+                </StackPanel>
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    RowSpacing="8"
+                    Padding="10"
+                    MinWidth="160">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="학번" />
+                    <TextBlock
+                        x:Name="StudentNumber"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="1100001" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="지역" />
+                    <TextBlock
+                        x:Name="StudentLocation"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="서울" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="반" />
+                    <TextBlock
+                        x:Name="StudentClass"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="1반" />
+                </Grid>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" />
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    RowSpacing="8"
+                    Padding="10"
+                    MinWidth="160">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="마일리지" />
+                    <TextBlock
+                        x:Name="StudentMileage"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="0M" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="레벨" />
+                    <TextBlock
+                        x:Name="StudentLevel"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="Bronze 1" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="경험치" />
+                    <TextBlock
+                        x:Name="StudentLevelPercent"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Text="0%" />
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Button
+            x:Name="LogoutButton"
+            Grid.ColumnSpan="3"
+            Grid.Row="2"
+            BorderThickness="1"
+            CornerRadius="10"
+            Padding="20, 20"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            Click="Logout"
+            Style="{ThemeResource AccentButtonStyle}">
+            <Button.Content>
+                <Grid HorizontalAlignment="Stretch">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        Text="로그아웃" />
+                    <FontIcon
+                        HorizontalAlignment="Right"
+                        Glyph="&#xF3B1;" />
+                </Grid>
+            </Button.Content>
+        </Button>
+
+        <Button
+            x:Name="LoginButton"
+            Grid.ColumnSpan="3"
+            Grid.Row="2"
+            BorderThickness="1"
+            CornerRadius="10"
+            Padding="20, 20"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            Visibility="Collapsed"
+            Click="Login"
+            Style="{ThemeResource AccentButtonStyle}">
+            <Button.Content>
+                <Grid HorizontalAlignment="Stretch">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        Text="로그인" />
+                    <FontIcon
+                        HorizontalAlignment="Right"
+                        Glyph="&#xF3B1;" />
+                </Grid>
+            </Button.Content>
+        </Button>
+    </StackPanel>
 </Page>
