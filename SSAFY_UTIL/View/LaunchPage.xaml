@@ -8,5 +8,62 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <TextBlock Text="LaunchPage" />
+    <StackPanel
+        Orientation="Vertical">
+        <TextBlock
+            Text="점심 메뉴"
+            Margin="0,0,0,18"
+            Style="{ThemeResource TitleLargeTextBlockStyle}" />
+        <StackPanel
+            Orientation="Horizontal"
+            Margin="0,0,0,18">
+            <DropDownButton 
+                x:Name="LocationDropdown"
+                Content="지역"
+                HorizontalContentAlignment="Left"
+                Width="100">
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuFlyoutItem Text="서울" />
+                        <MenuFlyoutItem Text="대전" />
+                        <MenuFlyoutItem Text="광주" />
+                        <MenuFlyoutItem Text="구미" />
+                        <MenuFlyoutItem Text="부울경" />
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            <CalendarDatePicker
+                x:Name="SelectedDate"
+                Margin="12,0,0,0"
+                Width="120"
+                DateFormat="{}{year.full}.{month.integer}.{day.integer}"
+                PlaceholderText="날자 선택" />
+        </StackPanel>
+
+        <Grid
+            HorizontalAlignment="Stretch"
+            BorderThickness="1"
+            CornerRadius="10"
+            Padding="20"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            Background="{ThemeResource CardBackgroundFillColorDefault}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.2*" />
+                <ColumnDefinition Width="0.8*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel
+                Orientation="Vertical"
+                Grid.Column="0">
+                <TextBlock
+                    Text="식당 선택"
+                    Margin="0,0,0,8"
+                    HorizontalAlignment="Center"
+                    Style="{ThemeResource BodyStrongTextBlockStyle}"/>
+                <ListView d:DataContext="{11, 22, 33}">
+                    
+                </ListView>
+            </StackPanel>
+        </Grid>
+
+    </StackPanel>
 </Page>

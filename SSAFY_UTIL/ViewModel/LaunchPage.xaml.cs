@@ -1,4 +1,5 @@
 using Microsoft.UI.Xaml.Controls;
+using System;
 
 namespace SSAFY_UTIL.View
 {
@@ -10,6 +11,9 @@ namespace SSAFY_UTIL.View
         public LaunchPage()
         {
             this.InitializeComponent();
+            SelectedDate.Date = DateTime.Now;
+            SelectedDate.MinDate = DateTime.Now.AddDays(-7);
+            SelectedDate.MaxDate = DateTime.Now.AddDays(7);
         }
     }
 }
