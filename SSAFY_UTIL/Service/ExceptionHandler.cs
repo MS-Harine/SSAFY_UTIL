@@ -2,12 +2,6 @@
 using Microsoft.UI.Xaml.Controls;
 using SSAFY_UTIL.View;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Popups;
 
 namespace SSAFY_UTIL.Service
 {

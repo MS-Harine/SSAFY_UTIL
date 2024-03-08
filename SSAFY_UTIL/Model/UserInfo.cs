@@ -1,11 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SSAFY_UTIL.Service;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SSAFY_UTIL.Model
 {
@@ -20,7 +16,7 @@ namespace SSAFY_UTIL.Model
 
         public void SetUserAttendance(JObject attendanceInfo)
         {
-            attendanceInfo.Add("LastTime", DateTime.Now);
+            attendanceInfo["LastTime"] = DateTime.Now;
             LocalStorage.SetValue(ATTENDANCE_KEY, attendanceInfo.ToString());
         }
 

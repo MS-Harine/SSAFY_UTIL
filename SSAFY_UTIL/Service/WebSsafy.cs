@@ -1,13 +1,10 @@
 ﻿using SSAFY_UTIL.Service.Networking;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text.RegularExpressions;
 
 namespace SSAFY_UTIL.Service
@@ -186,7 +183,7 @@ namespace SSAFY_UTIL.Service
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
 
-            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='state outRoomEnd']");
+            HtmlNode node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='state2 outRoomEnd']");
             if (node == null)
             {
                 return (string.Empty, string.Empty);

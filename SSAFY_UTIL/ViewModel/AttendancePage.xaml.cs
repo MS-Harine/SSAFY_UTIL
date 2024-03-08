@@ -1,20 +1,9 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using Newtonsoft.Json.Linq;
 using SSAFY_UTIL.Model;
 using SSAFY_UTIL.Service;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 
 namespace SSAFY_UTIL.View
 {
@@ -132,36 +121,46 @@ namespace SSAFY_UTIL.View
             AttendanceAbsent.Text = cache["AttendanceAbsent"].ToString() + "ÀÏ";
         }
 
-        private async void RoomInButtonClick(object sender, RoutedEventArgs args)
+        private void RoomInButtonClick(object sender, RoutedEventArgs args)
         {
-            bool result = await WebHelper.CheckIn();
-            if (!result)
-                return;
+            var mainPage = (Application.Current as App).Window.Content as HomePage;
+            _ = mainPage.LoadingTask(async () =>
+            {
+                bool result = await WebHelper.CheckIn();
+                if (!result)
+                    return;
 
-            var (roomInTime, roomInText) = await WebHelper.CheckInTime();
-            JObject cache = UserModel.GetUserAttendance() ?? new();
-            cache["roomInTime"] = roomInTime;
-            cache["roomInText"] = roomInText;
-            UserModel.SetUserAttendance(cache);
+                var (roomInTime, roomInText) = await WebHelper.CheckInTime();
+                JObject cache = UserModel.GetUserAttendance() ?? new();
+                cache["roomInTime"] = roomInTime;
+                cache["roomInText"] = roomInText;
+                UserModel.SetUserAttendance(cache);
 
-            RoomInText.Text = roomInText;
-            RoomInTime.Text = roomInTime;
+                RoomInText.Text = roomInText;
+                RoomInTime.Text = roomInTime;
+                RoomInButton.IsEnabled = false;
+                RoomOutButton.IsEnabled = true;
+            });
         }
 
-        private async void RoomOutButtonClick(object sender, RoutedEventArgs args)
+        private void RoomOutButtonClick(object sender, RoutedEventArgs args)
         {
-            bool result = await WebHelper.CheckOut();
-            if (!result)
-                return;
+            var mainPage = (Application.Current as App).Window.Content as HomePage;
+            _ = mainPage.LoadingTask(async () =>
+            {
+                bool result = await WebHelper.CheckOut();
+                if (!result)
+                    return;
 
-            var (roomOutTime, roomOutText) = await WebHelper.CheckOutTime();
-            JObject cache = UserModel.GetUserAttendance() ?? new();
-            cache["roomOutTime"] = roomOutTime;
-            cache["roomOutText"] = roomOutText;
-            UserModel.SetUserAttendance(cache);
+                var (roomOutTime, roomOutText) = await WebHelper.CheckOutTime();
+                JObject cache = UserModel.GetUserAttendance() ?? new();
+                cache["roomOutTime"] = roomOutTime;
+                cache["roomOutText"] = roomOutText;
+                UserModel.SetUserAttendance(cache);
 
-            RoomOutText.Text = roomOutText;
-            RoomOutTime.Text = roomOutTime;
+                RoomOutText.Text = roomOutText;
+                RoomOutTime.Text = roomOutTime;
+            });
         }
     }
 }
