@@ -2,7 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json.Linq;
 using SSAFY_UTIL.Model;
-using SSAFY_UTIL.Service;
+using SSAFY_UTIL.Service.Networking;
 using System;
 
 namespace SSAFY_UTIL.View

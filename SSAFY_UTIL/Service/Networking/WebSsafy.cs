@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 
-namespace SSAFY_UTIL.Service
+namespace SSAFY_UTIL.Service.Networking
 {
     public class WebSsafy : NetworkingBase
     {

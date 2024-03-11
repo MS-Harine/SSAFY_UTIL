@@ -59,9 +59,6 @@
                     Margin="0,0,0,8"
                     HorizontalAlignment="Center"
                     Style="{ThemeResource BodyStrongTextBlockStyle}"/>
-                <ListView d:DataContext="{11, 22, 33}">
-                    
-                </ListView>
             </StackPanel>
         </Grid>
 

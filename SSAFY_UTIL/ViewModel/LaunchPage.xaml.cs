@@ -8,12 +8,20 @@ namespace SSAFY_UTIL.View
     /// </summary>
     public sealed partial class LaunchPage : Page
     {
+
         public LaunchPage()
         {
             this.InitializeComponent();
+            
+        }
+
+        private void InitializeUI()
+        {
             SelectedDate.Date = DateTime.Now;
             SelectedDate.MinDate = DateTime.Now.AddDays(-7);
             SelectedDate.MaxDate = DateTime.Now.AddDays(7);
+
+
         }
     }
 }

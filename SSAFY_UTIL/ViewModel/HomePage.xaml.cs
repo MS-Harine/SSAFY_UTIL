@@ -1,7 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using SSAFY_UTIL.Model;
-using SSAFY_UTIL.Service;
+using SSAFY_UTIL.Service.Networking;
 using System;
 using System.Threading.Tasks;
 
