@@ -14,52 +14,96 @@
             Text="점심 메뉴"
             Margin="0,0,0,18"
             Style="{ThemeResource TitleLargeTextBlockStyle}" />
-        <StackPanel
-            Orientation="Horizontal"
-            Margin="0,0,0,18">
-            <DropDownButton 
-                x:Name="LocationDropdown"
-                Content="지역"
-                HorizontalContentAlignment="Left"
-                Width="100">
-                <DropDownButton.Flyout>
-                    <MenuFlyout Placement="Bottom">
-                        <MenuFlyoutItem Text="서울" />
-                        <MenuFlyoutItem Text="대전" />
-                        <MenuFlyoutItem Text="광주" />
-                        <MenuFlyoutItem Text="구미" />
-                        <MenuFlyoutItem Text="부울경" />
-                    </MenuFlyout>
-                </DropDownButton.Flyout>
-            </DropDownButton>
-            <CalendarDatePicker
-                x:Name="SelectedDate"
-                Margin="12,0,0,0"
-                Width="120"
-                DateFormat="{}{year.full}.{month.integer}.{day.integer}"
-                PlaceholderText="날자 선택" />
-        </StackPanel>
 
         <Grid
             HorizontalAlignment="Stretch"
             BorderThickness="1"
             CornerRadius="10"
-            Padding="20"
+            Padding="10"
+            Height="230"
+            ColumnSpacing="20"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             Background="{ThemeResource CardBackgroundFillColorDefault}">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.15*" />
                 <ColumnDefinition Width="0.2*" />
-                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="0.25*" />
+                <ColumnDefinition Width="0.4*" />
             </Grid.ColumnDefinitions>
-            <StackPanel
-                Orientation="Vertical"
-                Grid.Column="0">
-                <TextBlock
-                    Text="식당 선택"
-                    Margin="0,0,0,8"
+
+            <ListView
+                Grid.Column="0"
+                x:Name="LocationList"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                ItemsSource="{x:Bind Locations}"
+                SelectionChanged="LocationListSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView
+                Grid.Column="1"
+                x:Name="DateList"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                ItemsSource="{x:Bind Dates}"
+                SelectionChanged="DateListSelected"
+                Visibility="Collapsed">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock 
+                            Text="{Binding Item1}"
+                            Style="{ThemeResource BodyTextBlockStyle}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView
+                Grid.Column="2"
+                x:Name="TypeList"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                ItemsSource="{x:Bind MenuTypes}"
+                Visibility="Collapsed">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Border
+                Grid.Column="2"
+                x:Name="TypeListEmptyBorder"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Visibility="Collapsed">
+                <StackPanel 
                     HorizontalAlignment="Center"
-                    Style="{ThemeResource BodyStrongTextBlockStyle}"/>
-            </StackPanel>
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        Text="등록된 메뉴가 없습니다"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Margin="0,0,0,8"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                    <TextBlock
+                        Text="메뉴를 추가해보세요!"
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+            <ProgressRing 
+                Grid.Column="2"
+                x:Name="TypeListLoadingIndicator"
+                IsActive="True" 
+                Visibility="Collapsed" />
         </Grid>
 
     </StackPanel>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using System.Net.Http;
 
 namespace SSAFY_UTIL.Service.Networking
 {
@@ -66,7 +67,7 @@ namespace SSAFY_UTIL.Service.Networking
                 new(CsrfHeader, CsrfToken)
             };
 
-            var (StatusCode, Response) = await PostAsString(LOGIN_URL, null, LoginInfo, headers);
+            var (StatusCode, Response) = await Request(HttpMethod.Post, LOGIN_URL, null, LoginInfo, headers);
             if (StatusCode == HttpStatusCode.Forbidden)
             {
                 ExceptionHandler.ErrorMessage("Invalid CSRF Token");
@@ -89,7 +90,7 @@ namespace SSAFY_UTIL.Service.Networking
             };
 
             bool result = false;
-            var (StatusCode, _) = await PostAsString(LOGOUT_URL, null, null, headers);
+            var (StatusCode, _) = await Request(HttpMethod.Post, LOGOUT_URL, null, String.Empty, headers);
             if (StatusCode == HttpStatusCode.Forbidden)
             {
                 ExceptionHandler.ErrorMessage("Invalid CSRF Token");
@@ -112,7 +113,7 @@ namespace SSAFY_UTIL.Service.Networking
                 new(CsrfHeader, CsrfToken)
             };
 
-            var (StatusCode, Response) = await PostAsString(CHECKIN_URL, null, null, headers);
+            var (StatusCode, Response) = await Request(HttpMethod.Post, CHECKIN_URL, null, String.Empty, headers);
             if (StatusCode == HttpStatusCode.Forbidden)
             {
                 ExceptionHandler.ErrorMessage("Invalid CSRF Token");
@@ -136,7 +137,7 @@ namespace SSAFY_UTIL.Service.Networking
                 new(CsrfHeader, CsrfToken)
             };
 
-            var (StatusCode, Response) = await PostAsString(CHECKOUT_URL, null, null, headers);
+            var (StatusCode, Response) = await Request(HttpMethod.Post, CHECKOUT_URL, null, String.Empty, headers);
             if (StatusCode == HttpStatusCode.Forbidden)
             {
                 ExceptionHandler.ErrorMessage("Invalid CSRF Token");
@@ -155,7 +156,7 @@ namespace SSAFY_UTIL.Service.Networking
         public async Task<(string, string)> CheckInTime()
         {
             List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
-            var (_, Response) = await GetAsString(HOME_URL, null, headers);
+            var (_, Response) = await Request(HttpMethod.Get, HOME_URL, null, String.Empty, headers);
 
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
@@ -178,7 +179,7 @@ namespace SSAFY_UTIL.Service.Networking
         public async Task<(string, string)> CheckOutTime()
         {
             List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
-            var (_, Response) = await GetAsString(HOME_URL, null, headers);
+            var (_, Response) = await Request(HttpMethod.Get, HOME_URL, null, String.Empty, headers);
 
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
@@ -209,7 +210,7 @@ namespace SSAFY_UTIL.Service.Networking
                 new("attdYrM", DateTime.Now.Year.ToString() + month.ToString("00")) 
             };
 
-            var (_, Response) = await PostAsString(ATTENDANCE_CONFIRM_URL, null, body, headers);
+            var (_, Response) = await Request(HttpMethod.Post, ATTENDANCE_CONFIRM_URL, null, body, headers);
 
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(Response);
@@ -233,7 +234,7 @@ namespace SSAFY_UTIL.Service.Networking
             HtmlDocument htmlDoc = new();
             List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
            
-            var (_, Response) = await GetAsString(HOME_URL, null, headers);
+            var (_, Response) = await Request(HttpMethod.Get, HOME_URL, null, String.Empty, headers);
             htmlDoc.LoadHtml(Response);
             string studentNumber = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='profile-area']/div[1]/a/div/span[1]").InnerText.Trim();
             string studentName = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='profile-area']/div[1]/a/div/span[2]/em").InnerText.Trim();
@@ -242,7 +243,7 @@ namespace SSAFY_UTIL.Service.Networking
             string studentLevel = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='my-level']/div/p/span").InnerText.Trim();
             studentLevel = Regex.Replace(studentLevel, @"\s+", " ");
 
-            (_, Response) = await GetAsString(CLASS_URL, null, headers);
+            (_, Response) = await Request(HttpMethod.Get, CLASS_URL, null, String.Empty, headers);
             htmlDoc.LoadHtml(Response);
             string studentLocationClass = htmlDoc.DocumentNode.SelectSingleNode("//article/div[1]/h3/span[2]").InnerText.Trim();
             string studentLocation = studentLocationClass[..2];
@@ -264,7 +265,7 @@ namespace SSAFY_UTIL.Service.Networking
             HtmlDocument htmlDoc = new();
             List<KeyValuePair<string, string>> headers = new() { new("Accept", "*/*") };
 
-            var (_, content) = await GetAsString(ATTENDANCE_URL, null, headers);
+            var (_, content) = await Request(HttpMethod.Get, ATTENDANCE_URL, null, String.Empty, headers);
             htmlDoc.LoadHtml(content);
 
             JObject result = new();
@@ -301,7 +302,7 @@ namespace SSAFY_UTIL.Service.Networking
             {
                 new("Accept", "*/*")
             };
-            var (_, content) = await GetAsString(Url, null, headers);
+            var (_, content) = await Request(HttpMethod.Get, Url, null, String.Empty, headers);
             
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(content);

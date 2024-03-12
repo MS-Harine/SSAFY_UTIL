@@ -33,9 +33,11 @@ namespace SSAFY_UTIL.Service.Networking
             }
         }
 
-        protected async Task<(HttpStatusCode, string)> GetAsString(
-            string path, 
+        protected async Task<(HttpStatusCode, string)> Request(
+            HttpMethod method,
+            string path,
             List<KeyValuePair<string, string>>? parameters,
+            string? body,
             List<KeyValuePair<string, string>>? headers)
         {
             if (parameters != null)
@@ -46,7 +48,7 @@ namespace SSAFY_UTIL.Service.Networking
             }
 
             HttpResponseMessage response;
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, path))
+            using (var requestMessage = new HttpRequestMessage(method, path))
             {
                 if (headers != null)
                 {
@@ -56,6 +58,10 @@ namespace SSAFY_UTIL.Service.Networking
                     }
                 }
 
+                if (!String.IsNullOrEmpty(body))
+                {
+                    requestMessage.Content = new StringContent(body);
+                }
                 response = await client.SendAsync(requestMessage);
             }
 
@@ -63,7 +69,8 @@ namespace SSAFY_UTIL.Service.Networking
             return (response.StatusCode, result);
         }
 
-        protected async Task<(HttpStatusCode, string)> PostAsString(
+        protected async Task<(HttpStatusCode, string)> Request(
+            HttpMethod method,
             string path,
             List<KeyValuePair<string, string>>? parameters,
             List<KeyValuePair<string, string>>? body,
@@ -77,7 +84,7 @@ namespace SSAFY_UTIL.Service.Networking
             }
 
             HttpResponseMessage response;
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, path))
+            using (var requestMessage = new HttpRequestMessage(method, path))
             {
                 if (headers != null)
                 {
