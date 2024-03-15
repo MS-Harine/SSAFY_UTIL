@@ -3,7 +3,8 @@
     x:Class="SSAFY_UTIL.View.LaunchPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SSAFY_UTIL"
+    xmlns:local="using:SSAFY_UTIL.View"
+    xmlns:localComp="using:SSAFY_UTIL.View.Component"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -15,21 +16,24 @@
             Margin="0,0,0,18"
             Style="{ThemeResource TitleLargeTextBlockStyle}" />
 
+        <TextBlock
+            Text="조회하기"
+            Style="{ThemeResource MarginedBodyLargeTextBlockStyle}" />
         <Grid
             HorizontalAlignment="Stretch"
             BorderThickness="1"
             CornerRadius="10"
-            Padding="10"
-            Height="230"
-            ColumnSpacing="20"
-            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-            Background="{ThemeResource CardBackgroundFillColorDefault}">
+            Height="210"
+            ColumnSpacing="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.15*" />
                 <ColumnDefinition Width="0.2*" />
                 <ColumnDefinition Width="0.25*" />
                 <ColumnDefinition Width="0.4*" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
             <ListView
                 Grid.Column="0"
@@ -37,6 +41,7 @@
                 CornerRadius="10"
                 BorderThickness="1"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefault}"
                 ItemsSource="{x:Bind Locations}"
                 SelectionChanged="LocationListSelected">
                 <ListView.ItemTemplate>
@@ -51,14 +56,19 @@
                 CornerRadius="10"
                 BorderThickness="1"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefault}"
                 ItemsSource="{x:Bind Dates}"
                 SelectionChanged="DateListSelected"
                 Visibility="Collapsed">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock 
-                            Text="{Binding Item1}"
-                            Style="{ThemeResource BodyTextBlockStyle}"/>
+                    <DataTemplate x:DataType="local:DateForVis">
+                        <TextBlock>
+                            <Run Text="{x:Bind Prefix}" />
+                            <Run 
+                                Text="{x:Bind DayWeek}"
+                                Foreground="{x:Bind Color}" />
+                            <Run Text="{x:Bind Postfix}" />
+                        </TextBlock>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -68,11 +78,14 @@
                 CornerRadius="10"
                 BorderThickness="1"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefault}"
                 ItemsSource="{x:Bind MenuTypes}"
                 Visibility="Collapsed">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" />
+                        <TextBlock 
+                            Text="{Binding}"
+                            Foreground="white"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -82,6 +95,7 @@
                 CornerRadius="10"
                 BorderThickness="1"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefault}"
                 Visibility="Collapsed">
                 <StackPanel 
                     HorizontalAlignment="Center"
@@ -99,12 +113,73 @@
                         VerticalAlignment="Center" />
                 </StackPanel>
             </Border>
+            <Border
+                Grid.Column="2"
+                x:Name="TypeListHolidayBorder"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefault}"
+                Visibility="Collapsed">
+                <StackPanel 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        Text="주말에는 쉬어야해요!"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Margin="0,0,0,8"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                    <TextBlock
+                        Text="단순한 데이터 조회도"
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    </TextBlock>
+                    <TextBlock
+                        Text="요금이 발생해요"
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    </TextBlock>
+                    <TextBlock
+                        Text="개발자의 지갑을 보호해주세요"
+                        FontSize="11"
+                        Margin="0,6,0,0"
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    </TextBlock>
+                </StackPanel>
+            </Border>
             <ProgressRing 
                 Grid.Column="2"
                 x:Name="TypeListLoadingIndicator"
                 IsActive="True" 
                 Visibility="Collapsed" />
+            <Border
+                Grid.Column="3"
+                x:Name="RecommandedMenu"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefault}"
+                Visibility="Visible">
+                <StackPanel 
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                    <TextBlock
+                        Text="가장 많은 추천을 받은 메뉴"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Margin="0,8,0,8"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                    <localComp:Divider />
+                </StackPanel>
+            </Border>
         </Grid>
+        
+        
 
     </StackPanel>
 </Page>

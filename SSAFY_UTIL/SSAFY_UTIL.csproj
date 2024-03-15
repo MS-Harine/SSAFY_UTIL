@@ -12,12 +12,11 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Secure\firebaseAccountKey.json" />
-    <None Remove="Secure\FirebaseAdminKey.json" />
     <None Remove="TextBlockResources.xaml" />
     <None Remove="View\AccountPage.xaml" />
     <None Remove="View\AttendancePage.xaml" />
     <None Remove="View\Component\Divider.xaml" />
+    <None Remove="View\Component\LaunchMenu.xaml" />
     <None Remove="View\Component\SettingItem.xaml" />
     <None Remove="View\GithubPage.xaml" />
     <None Remove="View\HomePage.xaml" />
@@ -34,9 +33,6 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Content Include="Secure\FirebaseAdminKey.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -58,6 +54,11 @@
   <ItemGroup>
     <Folder Include="Assets\Images\" />
     <Folder Include="Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="View\Component\LaunchMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="View\LoginForm.xaml">

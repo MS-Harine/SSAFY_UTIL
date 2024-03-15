@@ -1,11 +1,13 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
 using SSAFY_UTIL.Service.Database;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.UI.StartScreen;
 using Location = SSAFY_UTIL.Model.Location;
 
 namespace SSAFY_UTIL.View
@@ -17,7 +19,7 @@ namespace SSAFY_UTIL.View
     {
         private Firebase db = Firebase.GetInstance();
 
-        private ObservableCollection<Tuple<string, DateOnly>> Dates = new();
+        private ObservableCollection<DateForVis> Dates = new();
         private ObservableCollection<string> Locations = new();
         private ObservableCollection<string> MenuTypes = new();
 
@@ -45,14 +47,7 @@ namespace SSAFY_UTIL.View
             for (int i = -7; i <= 7; i++)
             {
                 DateOnly date = DateOnly.FromDateTime(DateTime.Now.AddDays(i));
-                if (i == 0)
-                {
-                    Dates.Add(new Tuple<string, DateOnly>(date.ToString("¿À´Ã"), date));
-                }
-                else
-                {
-                    Dates.Add(new Tuple<string, DateOnly>(date.ToString("MM¿ù ddÀÏ (ddd)"), date));
-                }
+                Dates.Add(new DateForVis(date));
             }
         }
 
@@ -72,35 +67,84 @@ namespace SSAFY_UTIL.View
 
         private async void DateListSelected(object sender, SelectionChangedEventArgs _)
         {
-            if (SelectedLocation == null || (Tuple<string, DateOnly>)(sender as ListView).SelectedItem == null)
+            if (SelectedLocation == null || (DateForVis)(sender as ListView).SelectedItem == null)
                 return;
 
-            SelectedDate = ((Tuple<string, DateOnly>)(sender as ListView).SelectedItem).Item2;
-            TypeList.Visibility = Visibility.Visible;
+            var SelectedItem = (DateForVis)(sender as ListView).SelectedItem;
+            TypeListEmptyBorder.Visibility = Visibility.Collapsed;
+            TypeListHolidayBorder.Visibility = Visibility.Collapsed;
+            TypeListLoadingIndicator.Visibility = Visibility.Collapsed;
+            TypeList.Visibility = Visibility.Collapsed;
 
-            TypeListLoadingIndicator.Visibility = Visibility.Visible;
-            JArray result = await db.Read(
-                Location.LocationInfo[SelectedLocation].ToString() + '/' +
-                SelectedDate.ToString() +
-                "/types.json");
-            
-            if (result == null)
+            if (SelectedItem.isDisable)
             {
-                TypeListEmptyBorder.Visibility = Visibility.Visible;
+                TypeListHolidayBorder.Visibility = Visibility.Visible;
             }
             else
             {
-                TypeListEmptyBorder.Visibility = Visibility.Collapsed;
-                MenuTypes.Clear();
-                foreach (string type in result.Select(v => (string)v))
+                SelectedDate = SelectedItem.Date;
+                TypeListLoadingIndicator.Visibility = Visibility.Visible;
+                JArray result = await db.Read(
+                    Location.LocationInfo[SelectedLocation].ToString() + '/' +
+                    SelectedDate.ToString() +
+                    "/types.json");
+
+                if (result == null)
                 {
-                    MenuTypes.Add(type);
+                    TypeListEmptyBorder.Visibility = Visibility.Visible;
                 }
+                else
+                {
+                    MenuTypes.Clear();
+                    foreach (string type in result.Select(v => (string)v))
+                    {
+                        MenuTypes.Add(type);
+                    }
+                    TypeList.Visibility = Visibility.Visible;
+                }
+                TypeListLoadingIndicator.Visibility = Visibility.Collapsed;
             }
-            
-            TypeListLoadingIndicator.Visibility = Visibility.Collapsed;
         }
+    }
 
+    class DateForVis
+    {
+        public DateOnly Date;
+        public string Prefix;
+        public string DayWeek;
+        public string Postfix;
+        public string Color;
+        public bool isDisable;
 
+        public DateForVis(DateOnly date)
+        {
+            Date = date;
+
+            if (date == DateOnly.FromDateTime(DateTime.Now))
+            {
+                Prefix = "¿À´Ã";
+                DayWeek = "";
+                Postfix = "";
+            }
+            else
+            {
+                Prefix = date.ToString("M¿ù ddÀÏ (");
+                DayWeek = date.ToString("ddd");
+                Postfix = ")";
+            }
+
+            Color = "black";
+            isDisable = false;
+            if (date.DayOfWeek == DayOfWeek.Saturday)
+            {
+                Color = "blue";
+                isDisable = true;
+            }
+            else if (date.DayOfWeek == DayOfWeek.Sunday)
+            {
+                Color = "red";
+                isDisable = true;
+            }
+        }
     }
 }
